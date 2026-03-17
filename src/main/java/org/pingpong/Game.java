@@ -4,53 +4,79 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
+
+import java.util.Random;
 
 public class Game {
-    private Group root;
-    private Rectangle rectangleLeft;
-    private Rectangle rectangleRight;
-    private Circle ball;
-    private int sceneW;
-    private int sceneH;
-    private int directionX;
+    private final double RECTANGLE_HEIGHT_TO_WINDOW_RATIO = 0.15;
+    private final double RECTANGLE_WIDTH = 15;
+    private final double HALF = 0.5;
+    private final double LEFT_RECTANGLE_VELOCITY = 10;
+    private final Group root;
+    private final Rectangle rectangleLeft;
+    private final Rectangle rectangleRight;
+    private final Circle ball;
+    private final int gameWindowWidth;
+    private final int gameWindowHeight;
+    private double ballVelocity;
+    private double directionX;
+    private double directionY;
+    private double deviation;
 
     public Game(int sceneH, int sceneW) {
-        this.sceneH = sceneH;
-        this.sceneW = sceneW;
+        this.gameWindowHeight = sceneH;
+        this.gameWindowWidth = sceneW;
         root = new Group();
-        rectangleRight = new Rectangle(20, 45);
-        rectangleLeft = new Rectangle(20, 45);
-        ball = new Circle(15);
+        rectangleRight = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight);
+        rectangleLeft = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight);
+        ball = new Circle(10);
         directionX = 1;
+        directionY = 1;
+        ballVelocity = 3;
+        deviation = 0;
         setPieces();
     }
 
     private void setPieces() {
-        setBallPosition(200, 200);
-        setRectangleRightPosition(570, 200);
-        setRectangleLeftPosition(0, 200);
-
+        setBallPosition(HALF * gameWindowWidth, HALF * gameWindowHeight);
+        setRectanglePosition(rectangleRight, gameWindowWidth - 25, gameWindowHeight * HALF);
+        setRectanglePosition(rectangleLeft, 10, gameWindowHeight * HALF);
 
         rectangleRight.setOnMouseDragged(mouseEvent -> {
-            setRectangleRightPosition(570, mouseEvent.getY());
+            setRectangleRightPosition(gameWindowWidth - 25, mouseEvent.getY());
         });
 
         root.setFocusTraversable(true);
-
         root.setOnKeyPressed(keyEvent -> {
 
             if (keyEvent.getCode() == KeyCode.UP) {
-                rectangleLeft.setY(getRectangleLeftPositionY() - 5);
+                rectangleLeft.setY(getRectangleLeftPositionY() - LEFT_RECTANGLE_VELOCITY);
             }
 
             if (keyEvent.getCode() == KeyCode.DOWN) {
-                rectangleLeft.setY(getRectangleLeftPositionY() + 5);
+                rectangleLeft.setY(getRectangleLeftPositionY() + LEFT_RECTANGLE_VELOCITY);
             }
 
         });
 
         root.getChildren().addAll(ball, rectangleRight, rectangleLeft);
+    }
+
+    public void updateGame() {
+        if (getBallPositionX() >= getRectangleRightPositionX()
+                && getBallPositionY() < getRectangleRightPositionY() + 0.15 * gameWindowHeight
+                && getBallPositionY() > getRectangleRightPositionY() - 0.15 * gameWindowHeight) {
+            switchXDirection();
+        }
+
+        if (getBallPositionX() <= getRectangleLeftPositionX() + 15
+                && getBallPositionY() < getRectangleLeftPositionY() + 0.15 * gameWindowHeight
+                && getBallPositionY() > getRectangleLeftPositionY() - 0.15 * gameWindowHeight) {
+            switchXDirection();
+        }
+
+        setBallPosition(getBallPositionX() + (ballVelocity * directionX), getBallPositionY() + (directionY * ballVelocity * 0.1));
+
     }
 
     public void setBallPosition(double x, double y) {
@@ -79,9 +105,9 @@ public class Game {
         return rectangleRight.getY();
     }
 
-    public void setRectangleLeftPosition(double x, double y) {
-        rectangleLeft.setX(x);
-        rectangleLeft.setY(y);
+    public void setRectanglePosition(Rectangle rectangle, double x, double y) {
+        rectangle.setX(x);
+        rectangle.setY(y);
     }
 
     public double getRectangleLeftPositionX() {
@@ -98,11 +124,16 @@ public class Game {
 
     public void switchXDirection() {
         directionX *= -1;
+
+        Random random = new Random();
+
+        int randomNum = random.nextInt(1, 3);
+        if (randomNum % 2 == 0){
+            directionY *= 1;
+            System.out.println("even");
+        }
+        else {
+            directionY *= -1;
+        }
     }
-
-    public int getXDirection() {
-        return directionX;
-    }
-
-
 }
