@@ -64,15 +64,23 @@ public class Game {
 
     public void updateGame() {
         if (getBallPositionX() >= getRectangleRightPositionX()
-                && getBallPositionY() < getRectangleRightPositionY() + 0.15 * gameWindowHeight
-                && getBallPositionY() > getRectangleRightPositionY() - 0.15 * gameWindowHeight) {
+                && getBallPositionY() < getRectangleRightPositionY() + RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight
+                && getBallPositionY() > getRectangleRightPositionY() - RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight) {
             switchXDirection();
         }
 
         if (getBallPositionX() <= getRectangleLeftPositionX() + 15
-                && getBallPositionY() < getRectangleLeftPositionY() + 0.15 * gameWindowHeight
-                && getBallPositionY() > getRectangleLeftPositionY() - 0.15 * gameWindowHeight) {
+                && getBallPositionY() < getRectangleLeftPositionY() + RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight
+                && getBallPositionY() > getRectangleLeftPositionY() - RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight) {
             switchXDirection();
+        }
+
+        if(getBallPositionY() >= gameWindowHeight){
+            directionY *= -1;
+        }
+
+        if(getBallPositionY() <= 0){
+            directionY *= -1;
         }
 
         setBallPosition(getBallPositionX() + (ballVelocity * directionX), getBallPositionY() + (directionY * ballVelocity * 0.1));
@@ -130,7 +138,6 @@ public class Game {
         int randomNum = random.nextInt(1, 3);
         if (randomNum % 2 == 0){
             directionY *= 1;
-            System.out.println("even");
         }
         else {
             directionY *= -1;

@@ -23,7 +23,7 @@ public class Launcher extends Application {
         scene.setFill(Color.LIGHTGOLDENRODYELLOW);
 
         stage.setScene(scene);
-
+        stage.show();
         game.getRoot().requestFocus();
     }
 }
