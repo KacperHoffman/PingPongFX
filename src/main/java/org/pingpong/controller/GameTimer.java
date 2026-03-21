@@ -1,4 +1,4 @@
-package org.pingpong;
+package org.pingpong.controller;
 
 import javafx.animation.AnimationTimer;
 

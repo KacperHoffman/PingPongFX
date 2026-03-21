@@ -1,9 +1,11 @@
-package org.pingpong;
+package org.pingpong.model;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.pingpong.controller.Game;
+import org.pingpong.controller.GameTimer;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.

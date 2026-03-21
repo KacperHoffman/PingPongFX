@@ -15,7 +15,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>org.pingpong.Launcher</mainClass>
+                    <mainClass>org.pingpong.model.Launcher</mainClass>
                 </configuration>
             </plugin>
         </plugins>
