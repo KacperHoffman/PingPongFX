@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
 import org.pingpong.model.Ball;
+import org.pingpong.model.GameState;
 import org.pingpong.model.Launcher;
 
 import java.util.Random;
@@ -24,6 +25,7 @@ public class Game {
     private final int gameWindowHeight;
     private int leftPlayerScore;
     private int rightPlayerScore;
+    private GameState gameState;
 
     public Game(int sceneH, int sceneW) {
         this.gameWindowHeight = sceneH;
@@ -39,22 +41,23 @@ public class Game {
     }
 
     private void setPieces() {
+        gameState = GameState.RUNNING;
         setBallPosition(HALF * gameWindowWidth, HALF * gameWindowHeight);
-        setRectanglePosition(rectangleRight, gameWindowWidth - 25, gameWindowHeight * HALF);
-        setRectanglePosition(rectangleLeft, 10, gameWindowHeight * HALF);
+        setRectanglePosition(rectangleRight, gameWindowWidth - 35, (gameWindowHeight * HALF) - (rectangleRight.getHeight() / 2));
+        setRectanglePosition(rectangleLeft, 5, (gameWindowHeight * HALF) - (rectangleLeft.getHeight() / 2));
 
         rectangleRight.setOnMouseDragged(mouseEvent -> {
-            setRectanglePosition(rectangleRight, gameWindowWidth - 25, mouseEvent.getY());
+            setRectanglePosition(rectangleRight, rectangleRight.getX(), mouseEvent.getY());
         });
 
         root.setFocusTraversable(true);
         root.setOnKeyPressed(keyEvent -> {
 
-            if (keyEvent.getCode() == KeyCode.UP) {
+            if (keyEvent.getCode() == KeyCode.UP && rectangleLeft.getY() + 3 >= 0) {
                 rectangleLeft.setY(rectangleLeft.getY() - LEFT_RECTANGLE_VELOCITY);
             }
 
-            if (keyEvent.getCode() == KeyCode.DOWN) {
+            if (keyEvent.getCode() == KeyCode.DOWN && rectangleLeft.getY() + 3 <= gameWindowHeight - RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight) {
                 rectangleLeft.setY(rectangleLeft.getY() + LEFT_RECTANGLE_VELOCITY);
             }
 
@@ -68,6 +71,7 @@ public class Game {
 
         if (ballReturned()) {
             rectangleCollision();
+            ball.addSpeed(0.5);
         }
 
         if (ballBouncedOnBorder()) {
@@ -79,7 +83,7 @@ public class Game {
             resetBall();
         }
 
-        if (leftPlayerScore == 11 || rightPlayerScore == 11){
+        if (leftPlayerScore == 2 || rightPlayerScore == 2) {
             endGame();
         }
 
@@ -112,16 +116,17 @@ public class Game {
     }
 
     private boolean ballReturned() {
-        return ((ball.getCenterX() >= (rectangleRight.getX() - (RECTANGLE_WIDTH * HALF)))
-                && (ball.getCenterY() <= (rectangleRight.getY() + (RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight)))
-                && (ball.getCenterY() >= (rectangleRight.getY() - (RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight))))
-                || ((ball.getCenterX() <= (rectangleLeft.getX() + (RECTANGLE_WIDTH * HALF)))
-                && (ball.getCenterY() < (rectangleLeft.getY() + (RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight)))
-                && (ball.getCenterY() > (rectangleLeft.getY() - (RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight))));
+        return (ball.getCenterX() >= rectangleRight.getX() - ball.getRadius()
+                && ball.getCenterY() >= rectangleRight.getY()
+                && ball.getCenterY() <= rectangleRight.getY() + RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight)
+                || (ball.getCenterX() <= rectangleLeft.getX() + RECTANGLE_WIDTH + ball.getRadius()
+                && ball.getCenterY() >= rectangleLeft.getY()
+                && ball.getCenterY() <= rectangleLeft.getY() + RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight);
+
     }
 
     private boolean ballBouncedOnBorder() {
-        return ball.getCenterY() >= gameWindowHeight || ball.getCenterY() <= 0;
+        return ball.getCenterY() + ball.getRadius() >= gameWindowHeight || ball.getCenterY() + ball.getRadius() <= 15;
     }
 
     private boolean isOut() {
@@ -148,11 +153,33 @@ public class Game {
     private void resetBall() {
         setBallPosition(HALF * gameWindowWidth, HALF * gameWindowHeight);
         ball.setRandomBallDirections();
+        ball.resetSpeed();
     }
 
-    private void endGame(){
-        root.getChildren().clear();
-        root.getChildren().add(new Label("GAME FINISHED"));
+    private void endGame() {
+        gameState = GameState.FINISHED;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public String getWinner() {
+        if (rightPlayerScore > leftPlayerScore) {
+            return "Right player wins";
+        } else {
+            return "Left player wins";
+        }
+    }
+
+    public void resetGame() {
+        leftPlayerScore = 0;
+        rightPlayerScore = 0;
+        gameState = GameState.RUNNING;
+        resetBall();
+        setRectanglePosition(rectangleRight, rectangleRight.getX(), (gameWindowHeight * HALF) - (rectangleRight.getHeight() / 2));
+        setRectanglePosition(rectangleLeft, 10, (gameWindowHeight * HALF) - (rectangleLeft.getHeight() / 2));
+
     }
 
     public Group getRoot() {

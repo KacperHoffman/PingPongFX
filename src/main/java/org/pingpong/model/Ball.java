@@ -12,7 +12,7 @@ public class Ball extends Circle {
 
     public Ball(int radius) {
         super(radius);
-        this.speed = 3;
+        this.speed = 1;
         this.setFill(Color.AQUAMARINE);
         setRandomBallDirections();
     }
@@ -41,7 +41,7 @@ public class Ball extends Circle {
     }
 
     public void resetSpeed() {
-        speed = 3;
+        speed = 1;
     }
 
     public int getDirectionX() {
