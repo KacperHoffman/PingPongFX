@@ -3,6 +3,8 @@ package org.pingpong.model;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.Random;
+
 public class Ball extends Circle {
     private double speed;
     private int directionX;
@@ -12,8 +14,22 @@ public class Ball extends Circle {
         super(radius);
         this.speed = 3;
         this.setFill(Color.AQUAMARINE);
-        directionX = 1;
-        directionY = 1;
+        setRandomBallDirections();
+    }
+
+    private int getRandomDirection() {
+        Random random = new Random();
+        boolean randomBool = random.nextBoolean();
+
+        if (randomBool) {
+            return 1;
+        }
+        return -1;
+    }
+
+    public void setRandomBallDirections(){
+        directionX = getRandomDirection();
+        directionY = getRandomDirection();
     }
 
     public double getSpeed() {

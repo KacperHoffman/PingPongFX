@@ -65,46 +65,44 @@ public class Game {
     }
 
     public void updateGame() {
-        if (ball.getCenterX() >= rectangleRight.getX()
-                && ball.getCenterY() < rectangleRight.getY() + RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight
-                && ball.getCenterY() > rectangleRight.getY() - RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight) {
+
+        if (ballReturned()) {
             rectangleCollision();
         }
 
-        if (ball.getCenterX() <= rectangleLeft.getX() + 15
-                && ball.getCenterY() < rectangleRight.getY() + RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight
-                && ball.getCenterY() > rectangleRight.getY() - RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight) {
-            rectangleCollision();
-        }
-
-        if (ball.getCenterY() >= gameWindowHeight || ball.getCenterY() <= 0) {
+        if (ballBouncedOnBorder()) {
             borderCollision();
         }
 
-        checkOut();
+        if (isOut()) {
+            updateGameScore();
+            resetBall();
+        }
 
-        gameScore.setText(leftPlayerScore + " | " + rightPlayerScore);
+        if (leftPlayerScore == 11 || rightPlayerScore == 11){
+            endGame();
+        }
 
         setBallPosition(ball.getCenterX() + (ball.getSpeed() * ball.getDirectionX()), ball.getCenterY() + (ball.getDirectionY() * ball.getSpeed() * 0.1));
     }
 
-    public void setBallPosition(double x, double y) {
+    private void setBallPosition(double x, double y) {
         ball.setCenterX(x);
         ball.setCenterY(y);
     }
 
-    public void setRectanglePosition(Rectangle rectangle, double x, double y) {
+    private void setRectanglePosition(Rectangle rectangle, double x, double y) {
         rectangle.setX(x);
         rectangle.setY(y);
     }
 
-    public void rectangleCollision() {
+    private void rectangleCollision() {
         ball.switchDirectionX();
 
         Random random = new Random();
-        int randomNum = random.nextInt(1, 3);
+        boolean switchY = random.nextBoolean();
 
-        if (randomNum % 2 == 0) {
+        if (switchY) {
             ball.switchDirectionY();
         }
     }
@@ -113,7 +111,20 @@ public class Game {
         ball.switchDirectionY();
     }
 
-    private void checkOut() {
+    private boolean ballReturned() {
+        return ((ball.getCenterX() >= (rectangleRight.getX() - (RECTANGLE_WIDTH * HALF)))
+                && (ball.getCenterY() <= (rectangleRight.getY() + (RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight)))
+                && (ball.getCenterY() >= (rectangleRight.getY() - (RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight))))
+                || ((ball.getCenterX() <= (rectangleLeft.getX() + (RECTANGLE_WIDTH * HALF)))
+                && (ball.getCenterY() < (rectangleLeft.getY() + (RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight)))
+                && (ball.getCenterY() > (rectangleLeft.getY() - (RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight))));
+    }
+
+    private boolean ballBouncedOnBorder() {
+        return ball.getCenterY() >= gameWindowHeight || ball.getCenterY() <= 0;
+    }
+
+    private boolean isOut() {
 
         boolean isOut = false;
 
@@ -127,17 +138,24 @@ public class Game {
             isOut = true;
         }
 
-        if (isOut) {
-            resetBall();
-        }
+        return isOut;
+    }
+
+    private void updateGameScore() {
+        gameScore.setText(leftPlayerScore + " | " + rightPlayerScore);
     }
 
     private void resetBall() {
         setBallPosition(HALF * gameWindowWidth, HALF * gameWindowHeight);
+        ball.setRandomBallDirections();
+    }
+
+    private void endGame(){
+        root.getChildren().clear();
+        root.getChildren().add(new Label("GAME FINISHED"));
     }
 
     public Group getRoot() {
         return root;
     }
-
 }

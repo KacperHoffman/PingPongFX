@@ -5,7 +5,6 @@ import javafx.animation.AnimationTimer;
 public class GameTimer extends AnimationTimer {
     private final Game game;
 
-
     public GameTimer(Game game) {
         this.game = game;
     }
@@ -13,7 +12,5 @@ public class GameTimer extends AnimationTimer {
     @Override
     public void handle(long l) {
         game.updateGame();
-
-
     }
 }
