@@ -1,13 +1,12 @@
 package org.pingpong.controller;
 
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.pingpong.model.Ball;
 import org.pingpong.model.GameState;
-import org.pingpong.model.Launcher;
 
 import java.util.Random;
 
@@ -33,6 +32,7 @@ public class Game {
         root = new Group();
         rectangleRight = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight);
         rectangleLeft = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT_TO_WINDOW_RATIO * gameWindowHeight);
+        rectangleLeft.setFill(Color.LIGHTSEAGREEN);
         ball = new Ball(10);
         leftPlayerScore = 0;
         rightPlayerScore = 0;
