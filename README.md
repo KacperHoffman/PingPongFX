@@ -15,14 +15,5 @@ A basic **Ping Pong (Pong) game** built in Java using **JavaFX** library. This g
   - `Arrow UP` → Move paddle up  
   - `Arrow DOWN` → Move paddle down  
 
-- **Player Right**  
-  - `Mouse` → Click and grab paddle to move it around  
-   
-
-## How to Run
-
-1. Make sure you have **Java JDK 8+** installed.
-2. Clone or download the repository.
-3. Compile the Java files:  
-   ```bash
-   javac *.java
+- **Player Right:**  
+  - `Mouse` → Click and grab paddle to move it around 
