@@ -27,3 +27,7 @@ cd ping-pong-game`
 `javac --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml *.java`
 ### 3. Run the game
 `java --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml Main`
+
+### Tips
+- Replace /path/to/javafx/lib with your actual JavaFX SDK path
+- If you're using an IDE (like IntelliJ or Eclipse), just run the Main class
