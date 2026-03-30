@@ -19,3 +19,11 @@ A basic **Ping Pong (Pong) game** built in Java using **JavaFX** library. This g
   - `Mouse` → Click and grab paddle to move it around 
 
 ![PingPongFX](PingPongGif.gif)
+
+### 1. Clone the repository
+`git clone https://github.com/your-username/ping-pong-game.git
+cd ping-pong-game`
+### 2. Compile the project
+`javac --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml *.java`
+### 3. Run the game
+`java --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml Main`
