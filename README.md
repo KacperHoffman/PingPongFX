@@ -17,3 +17,5 @@ A basic **Ping Pong (Pong) game** built in Java using **JavaFX** library. This g
 
 - **Player Right:**  
   - `Mouse` → Click and grab paddle to move it around 
+
+![PingPongFX](PingPongFX.gif)
