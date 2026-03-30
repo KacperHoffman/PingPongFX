@@ -21,8 +21,8 @@ A basic **Ping Pong (Pong) game** built in Java using **JavaFX** library. This g
 ![PingPongFX](PingPongGif.gif)
 
 ### 1. Clone the repository
-`git clone https://github.com/your-username/ping-pong-game.git
-cd ping-pong-game`
+`git clone https://github.com/KacperHoffman/PingPongFX.git
+cd PingPongFX`
 ### 2. Compile the project
 `javac --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml *.java`
 ### 3. Run the game
